@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TV Gratuite Légale - Togo & Francophonie</title>
+  <style>
+    body { 
+      margin:0; 
+      font-family: Arial, sans-serif; 
+      background:#111; 
+      color:#fff; 
+    }
+    header { 
+      background:#c00; 
+      padding:15px; 
+      text-align:center; 
+      position: relative; /* pour que le logo absolu soit par rapport au body ou header si besoin */
+    }
+    /* Logo site en haut à gauche */
+    .site-logo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 140px;               /* ajuste si trop grand/petit */
+      max-height: 80px;
+      z-index: 100;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .site-logo:hover {
+      opacity: 0.85;
+      transform: scale(1.05);
+    }
+    .grid { 
+      display:grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap:15px; 
+      padding:20px; 
+      margin-top: 60px;           /* espace pour le logo qui dépasse potentiellement du header */
+    }
+    .channel { 
+      background:#222; 
+      border-radius:8px; 
+      overflow:hidden; 
+      height:240px; 
+      position:relative; 
+      cursor: pointer;
+    }
+    .placeholder {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .channel:hover .placeholder {
+      background: #111;
+    }
+    .logo-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .channel-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
+    }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: rgba(200,0,0,0.85);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .placeholder-text {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 1.1em;
+      color: #ddd;
+      text-shadow: 0 1px 4px #000;
+      z-index: 5;
+    }
+    .iframe-container {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+    iframe {
+      width:100%;
+      height:100%;
+      border:none;
+    }
+    .channel h3 { 
+      margin:0; 
+      padding:10px; 
+      background:rgba(0,0,0,0.75); 
+      position:absolute; 
+      bottom:0; 
+      width:100%; 
+      text-align:center; 
+      z-index: 10;
+      font-size: 1.1em;
+    }
+    footer {
+      text-align:center; 
+      padding:25px 10px; 
+      font-size:0.82em; 
+      background:#000;
+      color:#aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo du site en haut à gauche -->
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQFU_Iem7NEMls6Cqyh6P2s7bq8aS-vPR31Q&s" 
+       alt="Logo TV Gratuite Légale" class="site-logo">
+
+  <header>
+    <h1>TV Gratuite Légale</h1>
+    <p>Chaînes publiques et internationales en direct – 100% légal – Cliquez pour lancer</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- TVT Togo -->
+    <div class="channel" data-src="http://drmv3-m6.info:80/play/live.php?mac=00:1A:79:84:1A:60&stream=146116&extension=m3u8">
+      <div class="placeholder">
+        <div class="logo-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Logo_TVT_FORMAT_6X6.jpg" 
+               alt="TVT Togo" class="channel-logo">
+        </div>
+        <div class="play-button">▶</div>
+        <div class="placeholder-text">TVT Togo – Direct</div>
+      </div>
+      <div class="iframe-container">
+        <iframe allowfullscreen></iframe>
+      </div>
+      <h3>TVT Togo</h3>
+    </div>
+
+    <!-- France 24 Français -->
+    <div class="channel" data-src="https://www.youtube.com/embed/live_stream?channel=UCCCPCZNChQdGa9EkATeye4g&autoplay=1">
+      <div class="placeholder">
+        <div class="logo-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg" 
+               alt="France 24" class="channel-logo">
+        </div>
+        <div class="play-button">▶</div>
+        <div class="placeholder-text">France 24 Français – Direct</div>
+      </div>
+      <div class="iframe-container">
+        <iframe allowfullscreen></iframe>
+      </div>
+      <h3>France 24 Français</h3>
+    </div>
+
+    <!-- TV5MONDE -->
+    <div class="channel" data-src="https://www.youtube.com/embed/live_stream?channel=UCJsZHTfrf7HMBq63FVFqLhg&autoplay=1">
+      <div class="placeholder">
+        <div class="logo-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/TV5MONDE_logo.png" 
+               alt="TV5MONDE" class="channel-logo">
+        </div>
+        <div class="play-button">▶</div>
+        <div class="placeholder-text">TV5MONDE – Direct</div>
+      </div>
+      <div class="iframe-container">
+        <iframe allowfullscreen></iframe>
+      </div>
+      <h3>TV5MONDE</h3>
+    </div>
+
+    <!-- Euronews Français -->
+    <div class="channel" data-src="https://fr.euronews.com/live">
+      <div class="placeholder">
+        <div class="logo-container">
+          <img src="https://seeklogo.com/images/E/euronews-logo-347145-seeklogo.com.png" 
+               alt="Euronews" class="channel-logo">
+        </div>
+        <div class="play-button">▶</div>
+        <div class="placeholder-text">Euronews Français – Direct</div>
+      </div>
+      <div class="iframe-container">
+        <iframe allowfullscreen></iframe>
+      </div>
+      <h3>Euronews Français</h3>
+    </div>
+
+  </div>
+
+  <footer>
+    Site non-officiel – Sources : YouTube Live & sites officiels des chaînes<br>
+    Respect des droits d'auteur – Usage personnel uniquement
+  </footer>
+
+  <script>
+    document.querySelectorAll('.channel').forEach(channel => {
+      channel.addEventListener('click', function() {
+        if (this.classList.contains('loaded')) return;
+
+        const src = this.getAttribute('data-src');
+        const iframe = this.querySelector('iframe');
+        iframe.src = src;
+
+        this.querySelector('.placeholder').style.display = 'none';
+        this.querySelector('.iframe-container').style.display = 'block';
+
+        this.classList.add('loaded');
+      });
+    });
+  </script>
+
+</body>
+</html>
