@@ -4,52 +4,79 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TV Gratuite Légale - Togo & Francophonie</title>
+
+  <!-- PWA : Manifest + icônes + theme -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#c00">
+  <link rel="apple-touch-icon" href="https://via.placeholder.com/180?text=TV">
+  <!-- Remplace par de vraies icônes 192x192 et 512x512 quand tu les auras -->
+
   <style>
     body { 
       margin:0; 
       font-family: Arial, sans-serif; 
-      background:#111; 
+      background:#0f0f0f; 
       color:#fff; 
     }
     header { 
       background:#c00; 
-      padding:15px; 
+      padding:20px; 
       text-align:center; 
-      position: relative; /* pour que le logo absolu soit par rapport au body ou header si besoin */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
+      position: relative;
     }
-    /* Logo site en haut à gauche */
     .site-logo {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 140px;               /* ajuste si trop grand/petit */
+      top: 12px;
+      left: 12px;
+      width: 140px;
       max-height: 80px;
       z-index: 100;
-      transition: opacity 0.3s, transform 0.3s;
     }
-    .site-logo:hover {
-      opacity: 0.85;
-      transform: scale(1.05);
+    .site-logo:hover { opacity: 0.9; transform: scale(1.04); }
+
+    .category {
+      margin: 50px 0 70px; /* plus d'espace entre catégories */
+      padding: 0 15px;
+      border-radius: 12px;
+      overflow: hidden;
     }
-    .grid { 
-      display:grid; 
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-      gap:15px; 
-      padding:20px; 
-      margin-top: 60px;           /* espace pour le logo qui dépasse potentiellement du header */
+    .category h2 {
+      margin: 0;
+      padding: 16px;
+      font-size: 1.5em;
+      text-align: center;
+      border-bottom: 3px solid;
     }
+    /* Couleurs différentes par catégorie */
+    .info       h2 { background:#1e3a5f; border-color:#3a7bd5; }
+    .musique    h2 { background:#2e1a47; border-color:#9b59b6; }
+    .jeunesse   h2 { background:#1a3c34; border-color:#27ae60; }
+    .sport      h2 { background:#3d1a1a; border-color:#e74c3c; }
+    .divert     h2 { background:#2c3e50; border-color:#3498db; }
+    .docu       h2 { background:#2f4f4f; border-color:#16a085; }
+    .films      h2 { background:#4a2c00; border-color:#f39c12; }
+    .general    h2 { background:#222;      border-color:#7f8c8d; }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+      padding: 25px 15px 35px;
+      background: rgba(30,30,30,0.6);
+    }
+
     .channel { 
-      background:#222; 
-      border-radius:8px; 
+      background:#1a1a1a; 
+      border-radius:10px; 
       overflow:hidden; 
-      height:240px; 
+      height:220px; 
       position:relative; 
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      transition: transform 0.18s;
     }
+    .channel:hover { transform: scale(1.04); }
+
     .placeholder {
       position: absolute;
       inset: 0;
@@ -58,54 +85,33 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      transition: background 0.3s;
-    }
-    .channel:hover .placeholder {
-      background: #111;
-    }
-    .logo-container {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
     }
     .channel-logo {
-      width: 100%;
-      height: 100%;
+      width: 85%;
+      height: 65%;
       object-fit: contain;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.9));
     }
     .play-button {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 100px;
-      height: 100px;
-      background: rgba(200,0,0,0.85);
+      width: 80px;
+      height: 80px;
+      background: rgba(200,0,0,0.8);
       border-radius: 50%;
+      font-size: 42px;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 50px;
-      font-weight: bold;
-      color: white;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
       z-index: 5;
-      pointer-events: none;
     }
     .placeholder-text {
       position: absolute;
-      bottom: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-      font-size: 1.1em;
-      color: #ddd;
+      bottom: 8px;
+      font-size: 1.05em;
+      color: #ccc;
       text-shadow: 0 1px 4px #000;
       z-index: 5;
     }
@@ -121,357 +127,234 @@
     }
     .channel h3 { 
       margin:0; 
-      padding:10px; 
-      background:rgba(0,0,0,0.75); 
+      padding:8px; 
+      background:rgba(0,0,0,0.7); 
       position:absolute; 
       bottom:0; 
       width:100%; 
       text-align:center; 
-      z-index: 10;
-      font-size: 1.1em;
-    }
-    footer {
-      text-align:center; 
-      padding:25px 10px; 
-      font-size:0.82em; 
-      background:#000;
-      color:#aaa;
-    }
-    /* Fix pour mobile : ajuster le logo et le padding du header pour éviter le chevauchement */
-    @media (max-width: 768px) {
-      .site-logo {
-        width: 100px; /* Réduire la taille du logo sur mobile */
-        top: 5px;
-        left: 5px;
-      }
-      header {
-        padding-left: 110px; /* Ajouter de l'espace à gauche pour le logo */
-        padding-top: 10px;
-        padding-bottom: 10px;
-        text-align: left; /* Aligner le texte à gauche pour éviter le centrage sur le logo */
-      }
-      header h1 {
-        font-size: 1.5em; /* Réduire la taille du titre si nécessaire */
-        margin: 0;
-      }
-      header p {
-        font-size: 0.9em;
-        margin: 5px 0 0;
-      }
-      .grid {
-        margin-top: 0; /* Pas besoin d'autant d'espace en haut sur mobile */
-        padding: 10px;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Tuiles plus petites */
-      }
+      font-size: 1em;
     }
 
-    /* Ajouts pour catégories */
-    .category {
-      margin: 30px 0;
+    footer {
+      text-align:center; 
+      padding:30px 15px; 
+      font-size:0.85em; 
+      background:#000;
+      color:#999;
     }
-    .category h2 {
-      color: #ffcc00;
-      border-bottom: 2px solid #333;
-      padding-bottom: 10px;
-      text-align: center;
-    }
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 15px;
+
+    @media (max-width: 768px) {
+      .site-logo { width: 100px; top: 8px; left: 8px; }
+      header { padding-left: 115px; padding-top: 12px; padding-bottom: 12px; text-align: left; }
+      .category-grid { grid-template-columns: 1fr; gap: 16px; padding: 20px 10px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo du site en haut à gauche -->
   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQFU_Iem7NEMls6Cqyh6P2s7bq8aS-vPR31Q&s" 
        alt="Logo TV Gratuite Légale" class="site-logo">
 
   <header>
-    <h1> La TV Gratuite Et Légale</h1>
+    <h1>La TV Gratuite Et Légale</h1>
     <p>Chaînes publiques et internationales en direct – 100% légal – Cliquez pour lancer</p>
   </header>
 
-  <div class="category">
+  <!-- 1. Informations / Actualités -->
+  <div class="category info">
     <h2>Informations / Actualités</h2>
     <div class="category-grid">
-
-      <!-- France 24 Français -->
+      <!-- France 24 -->
       <div class="channel" data-src="https://www.youtube.com/embed/live_stream?channel=UCCCPCZNChQdGa9EkATeye4g&autoplay=1">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg" 
-                 alt="France 24" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">France 24 Français – Direct</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>France 24 Français</h3>
+        <div class="placeholder"><div class="logo-container"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg" alt="France 24" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">France 24</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>France 24</h3>
       </div>
-
-      <!-- Euronews Français -->
+      <!-- TV5MONDE -->
+      <div class="channel" data-src="https://ott.tv5monde.com/Content/HLS/Live/channel(info)/variant.m3u8?hdnea=st%3D1770335390~exp%3D1770342590~acl%3D%2F%2A~hmac%3Deb421a31016fc22b82d002c36ca2540c8e59aaa987024fc4bc94405e4cfd89f5">
+        <div class="placeholder"><div class="logo-container"><img src="https://upload.wikimedia.org/wikipedia/commons/4/42/TV5MONDE_logo.png" alt="TV5MONDE" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">TV5MONDE</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>TV5MONDE</h3>
+      </div>
+      <!-- Euronews -->
       <div class="channel" data-src="https://www.youtube.com/embed/live_stream?channel=UCW2QcKZiU8aUGg4yxCIditg&autoplay=1">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="data:image/png;base64,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" 
-                 alt="Euronews" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">Euronews Français – Direct</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
+        <div class="placeholder"><div class="logo-container"><img src="data:image/png;base64,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" alt="Euronews" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">Euronews Français</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
         <h3>Euronews Français</h3>
       </div>
-
     </div>
   </div>
 
-  <div class="category">
+  <!-- 2. Musique -->
+  <div class="category musique">
     <h2>Musique</h2>
     <div class="category-grid">
-
-      <!-- TRACE URBAN -->
-      <div class="channel" data-src="https://amg01131-tracetv-traceurbanuk-samsunguk-6r213.amagi.tv/ts-eu-w1-n2/playlist/amg01131-tracetv-traceurbanuk-samsunguk/cb543d177d6c648892d43660cef040a9f9591fde1d6988693eb5518975d1073edce2a59caa08ff16388f1ede7f0a66413a3e951fda77118fd87eb141453c5728cfffe729a2c05616b7db083429b56a062a866a68ac39437ed0e21f48a238b6720a5aa82a66443d80b846ac7256db80148b61299bce8c37683f03409a5e5afba358b1ebb30f4cdd38f4e74a55952c42e59f43c8821da689d05ac85ed574f5469c91a48bd317d18ff31893688af2cba84307fbb45ed1ad69b9dd951b48f61309606e9f623ef184281d80554a5ff985abf505ad52a6db54e10057db60f80fa449ccef49f70a2bdcffe7d0fe445330a7c5144d28ade09a479a5f3c9069e1abe5d17233ccb844380ffe64d626242f83bde520c49245d8e678c58360136e94ca0583cbe6caaf919d5a9020fdc2f6b3345601365755c80ef4da25f001e9558482532d554641edbd50c78dd617704147948f53d15c4aed8fc5d3915e759a20285bee61cb524a399f63222fb35f8cf0565b80280e8a222ebb0965f225d28c6ca4f795b57c78dfb8e04df068e3b070a2d50abb62315c42feb21b564b4872c7fd246a147cd04ef0dcdaeb145851ba17ac7f38ab94619253d4262fd0c0939c99f3c14a3fc13f/116/1920x1080_5288800/index.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Trace_urban.png" 
-                 alt="TRACE URBAN" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">TRACE URBAN</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
+      <!-- Trace Urban -->
+      <div class="channel" data-src="https://amg01131-tracetv-traceurbanuk-samsunguk-6r213.amagi.tv/ts-eu-w1-n2/playlist/amg01131-tracetv-traceurbanuk-samsunguk/.../index.m3u8"> <!-- lien tronqué dans ton message, garde le complet -->
+        <div class="placeholder"><div class="logo-container"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Trace_urban.png" alt="TRACE URBAN" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">TRACE URBAN</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
         <h3>TRACE URBAN</h3>
       </div>
-
       <!-- NEW WORLD MIX -->
       <div class="channel" data-src="https://hls.newworldtv.com/nw-magazine/video/live_3.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="data:image/png;base64,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" 
-                 alt="NEW WORLD MIX" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">NEW WORLD MIX</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
+        <div class="placeholder"><div class="logo-container"><img src="data:image/png;base64,...base64 de new world..." alt="NEW WORLD MIX" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">NEW WORLD MIX</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
         <h3>NEW WORLD MIX</h3>
       </div>
-
     </div>
   </div>
 
-  <div class="category">
+  <!-- 3. Animé / Jeunesse -->
+  <div class="category jeunesse">
     <h2>Animé / Jeunesse</h2>
     <div class="category-grid">
-
-      <!-- GULLI -->
-      <div class="channel" data-src="https://lbcdn.6cloud.fr/resource/m6web/l/gulli_hls_sd_short_q2hyb21h.m3u8?groups[]=m6web-live-gulli_ext">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Gulli_logo_2023.png" 
-                 alt="GULLI" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">GULLI</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>GULLI</h3>
-      </div>
-
-      <!-- TIVI MONDE -->
+      <!-- TIVI5MONDE -->
       <div class="channel" data-src="https://ott.tv5monde.com/Content/HLS/Live/channel(tivi5)/variant.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="data:image/png;base64,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" 
-                 alt="TIVI MONDE" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">TIVI MONDE – Direct</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>TIVI MONDE</h3>
+        <div class="placeholder"><div class="logo-container"><img src="data:image/png;base64,...base64 de tivi5..." alt="TIVI5MONDE" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">TIVI5MONDE</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>TIVI5MONDE</h3>
       </div>
-
     </div>
   </div>
 
-  <div class="category">
+  <!-- 4. Sport -->
+  <div class="category sport">
     <h2>Sport</h2>
     <div class="category-grid">
-
-      <!-- FOOT -->
-      <div class="channel" data-src="https://broadcasthub.click/hls/ZWevymm11TKF/index.m3u8?st=ugrfyW7C9TfZM3qegDP-tA&e=1758400712">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="data:image/jpeg;base64,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" 
-                 alt="NCI" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">NCI</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>NCI</h3>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="category">
-    <h2>Divertissement</h2>
-    <div class="category-grid">
-
-      <!-- LOVE THE PLANET -->
-      <div class="channel" data-src="https://amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr-hfam1.amagi.tv/ts-eu-w1-n2/playlist/amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr/cb543d177d6c648892d43660cef040a9f9591fde1d6988693eb5518975d1073edce2a59caa08ff16388f1ede7f0a66413a3e951fda77118fd87eb141453c5728cfffe729a2c05616b7db083429b56a062a866a68ac39437ed0e21f48a238b6720a5aa82a66443d80b846ac7256db80148b61299bce8c37683f03409a5e5afba358b1ebb35810dc3aa0b44e55952c42e49f43c8821da689d053965e8327f442ce92f0d8d51287d3f31893688af2cba84307fbb45ed1ad69b9dd951b48f61309606e9f623ef184281d80554a5ff985abf505ad52a6db54e10057db60f80fa449ccef49f70a2bdcffe7d0fe445330a7c5144d28ade09a479a5f3c9069e1abe5d17233ccb844380ffe64d626242f83bde520c49245d8e678c58360136e94ca0583cbe6caaf919d5a9020fdc2f6b3345601365755c80ef4da25f001e9558482532d554641edbd50c78dd617704147948f53d15c4aed8fc5d3915e759a20285bee61cb524a399f63222fb35f8cf0565b80280e8a222ebb0965f225d28c6ca4f795b57c78dfb8e04df068e3b070a2d50abb62315c42feb21b564b4872c7fd246a147cd04ef0dcdaeb145850b517ac1b3cab9461025d8cd32501e9ce61c636af2e0291a3/109/1920x1080_6046040/index.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://time2replay.com/wp-content/uploads/2023/08/love-theplanet-tv-direct-1194x676.jpg" 
-                 alt="LOVE THE PLANET" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">LOVE THE PLANET</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>LOVE THE PLANET</h3>
-      </div>
-
-      <!-- TELENOVELA -->
-      <div class="channel" data-src="https://stormcast-telenovelatv-1-fr.samsung.wurl.tv/3000.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://time2replay.com/wp-content/uploads/2023/07/telenovela-direct.jpg" 
-                 alt="TELENOVELA" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">TELENOVELA</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>TELENOVELA</h3>
-      </div>
-
-      <!-- TFX -->
-      <div class="channel" data-src="https://viamotionhsi.netplus.ch/live/eds/nt1/browser-HLS8/nt1.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/TFX_logo_2018.svg/1280px-TFX_logo_2018.svg.png" 
-                 alt="TFX" class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">TFX</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
-        <h3>TFX</h3>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="category">
-    <h2>Documentaire</h2>
-    <div class="category-grid">
-
-      <!-- TV7 (supposé documentaire ou info, adapté ici) -->
+      <!-- TV7 -->
       <div class="channel" data-src="https://live-tv7.digiteka.com/1913908445/index.m3u8">
-        <div class="placeholder">
-          <div class="logo-container">
-            <img src="data:image/png;base64,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" 
-                 alt="TV7 " class="channel-logo">
-          </div>
-          <div class="play-button">▶️</div>
-          <div class="placeholder-text">TV7</div>
-        </div>
-        <div class="iframe-container">
-          <iframe allowfullscreen></iframe>
-        </div>
+        <div class="placeholder">... logo TV7 ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
         <h3>TV7</h3>
       </div>
-
+      <!-- NCI -->
+      <div class="channel" data-src="https://cflive.kaltura.com/env/d.live.nvp1/live/hls/p/5571652/e/1_2gnrfyb6/.../index-s32.m3u8">
+        <div class="placeholder">... logo NCI ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>NCI</h3>
+      </div>
+      <!-- FOOT -->
+      <div class="channel" data-src="https://broadcasthub.click/hls/ZWevymm11TKF/index.m3u8?...">
+        <div class="placeholder">... logo FOOT ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>FOOT</h3>
+      </div>
+      <!-- L’ÉQUIPE TV -->
+      <div class="channel" data-src="https://live2.eu-north-1a.cf.dmcdn.net/.../live-1080.m3u8">
+        <div class="placeholder">... logo L’ÉQUIPE ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>L’ÉQUIPE TV</h3>
+      </div>
     </div>
   </div>
 
-  <div class="category">
-    <h2>Films</h2>
+  <!-- 5. Divertissement -->
+  <div class="category divert">
+    <h2>Divertissement</h2>
     <div class="category-grid">
-      <!-- Pas de chaînes spécifiques films dans le code, mais tu peux ajouter des liens vers replays légaux si besoin. Pour l'instant vide ou ajoute Arte Films comme suggestion précédente -->
-      <p style="text-align:center; color:#888;">Aucune chaîne live films pour l'instant – Consultez les replays sur Arte.tv !</p>
+      <!-- TFX -->
+      <div class="channel" data-src="https://viamotionhsi.netplus.ch/live/eds/nt1/browser-HLS8/nt1.m3u8">
+        <div class="placeholder"><div class="logo-container"><img src="https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/TFX_logo_2018.svg/1280px-TFX_logo_2018.svg.png" alt="TFX" class="channel-logo"></div><div class="play-button">▶️</div><div class="placeholder-text">TFX</div></div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>TFX</h3>
+      </div>
     </div>
   </div>
 
-<div style="text-align:center; padding:30px 10px; background:#1a1a1a; font-size:0.95em; color:#aaa;">
-  <p>Découvrez des offres exclusives adaptées à votre connexion :</p>
-  <a href="https://www.effectivegatecpm.com/rjm6a4yrka?key=d2ea1606aaaccfbe11ca55139854caf6" 
-     target="_blank" rel="nofollow sponsored noopener"
-     style="color:#ff6699; font-weight:bold; text-decoration:underline;">
-    Voir les promotions → 
-  </a>
-</div>
+  <!-- 6. Documentaire -->
+  <div class="category docu">
+    <h2>Documentaire</h2>
+    <div class="category-grid">
+      <!-- LOVE THE PLANET -->
+      <div class="channel" data-src="https://amg01821-lovetvchannels-lovetheplanetfrsamsung-samsungfr-hfam1.amagi.tv/.../index.m3u8">
+        <div class="placeholder">... logo LOVE THE PLANET ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>LOVE THE PLANET</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Films / Séries -->
+  <div class="category films">
+    <h2>Films / Séries</h2>
+    <div class="category-grid">
+      <!-- TELENOVELAS -->
+      <div class="channel" data-src="https://stormcast-telenovelatv-1-fr.samsung.wurl.tv/3000.m3u8">
+        <div class="placeholder">... logo TELENOVELA ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>TELENOVELAS</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Généraliste -->
+  <div class="category general">
+    <h2>Généraliste</h2>
+    <div class="category-grid">
+      <!-- ORTB -->
+      <div class="channel" data-src="https://srtblive.streamakaci.tv/ortb/ortb1-multi/playlist.m3u8">
+        <div class="placeholder">... logo ORTB ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>ORTB</h3>
+      </div>
+      <!-- RTI 1 -->
+      <div class="channel" data-src="https://cflive.kaltura.com/scf/env/d.live.nvp1/live/hls/p/6234172/e/1_vqff78xz/.../index-s32.m3u8?...">
+        <div class="placeholder">... logo RTI 1 ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>RTI 1</h3>
+      </div>
+      <!-- RTI 2 -->
+      <div class="channel" data-src="https://cflive.kaltura.com/scf/env/d.live.nvp1/live/hls/p/6234172/e/1_pbprnpab/.../index-s32.m3u8?...">
+        <div class="placeholder">... logo RTI 2 ...</div>
+        <div class="iframe-container"><iframe allowfullscreen></iframe></div>
+        <h3>RTI 2</h3>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding:40px 15px; background:#1a1a1a;">
+    <p>Découvrez des offres exclusives adaptées à votre connexion :</p>
+    <a href="https://www.effectivegatecpm.com/rjm6a4yrka?key=d2ea1606aaaccfbe11ca55139854caf6" target="_blank" style="color:#ff6699; font-weight:bold;">Voir les promotions →</a>
+  </div>
 
   <footer>
-  <p style="font-size:0.8em; color:#666; margin:20px 0;">
-    Partenaires : 
-    <a href="https://www.effectivegatecpm.com/rjm6a4yrka?key=d2ea1606aaaccfbe11ca55139854caf6" 
-       target="_blank" rel="nofollow sponsored noopener" style="color:#888; text-decoration:none;">
-      Offres partenaires
-    </a>
-  </p>
-  Site non-officiel – Sources : YouTube Live & sites officiels des chaînes<br>
-    Respect des droits d'auteur – Usage personnel uniquement
-</footer>
+    <p>Site non-officiel – Sources officielles & YouTube Live – Respect des droits d'auteur – Usage personnel</p>
+  </footer>
 
   <script>
+    // Ouverture player (comme avant)
     const channels = document.querySelectorAll('.channel');
-    
-    function resetAllChannels(exceptThis) {
-      channels.forEach(channel => {
-        if (channel !== exceptThis) {
-          const iframe = channel.querySelector('iframe');
-          iframe.src = ''; // Stop loading/playing
-          channel.querySelector('.placeholder').style.display = 'flex';
-          channel.querySelector('.iframe-container').style.display = 'none';
-          channel.classList.remove('loaded');
+    function resetAllChannels(except) {
+      channels.forEach(ch => {
+        if (ch !== except) {
+          ch.querySelector('iframe').src = '';
+          ch.querySelector('.placeholder').style.display = 'flex';
+          ch.querySelector('.iframe-container').style.display = 'none';
+          ch.classList.remove('loaded');
         }
       });
     }
-
-    channels.forEach(channel => {
-      channel.addEventListener('click', function() {
+    channels.forEach(ch => {
+      ch.addEventListener('click', function() {
         if (this.classList.contains('loaded')) return;
-
         resetAllChannels(this);
-
-        const src = this.getAttribute('data-src');
-        const iframe = this.querySelector('iframe');
-        iframe.src = src;
-
+        const src = this.dataset.src;
+        this.querySelector('iframe').src = src;
         this.querySelector('.placeholder').style.display = 'none';
         this.querySelector('.iframe-container').style.display = 'block';
-
         this.classList.add('loaded');
       });
     });
-  </script>
 
+    // PWA : register service worker simple
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker enregistré'))
+          .catch(err => console.log('Erreur SW:', err));
+      });
+    }
+  </script>
 </body>
 </html>
